@@ -6,7 +6,7 @@
 <div class="m-4 flex flex-col gap-2">
     <h1 class="text-blue-200 text-3xl font-bold">Discord slash command Manager</h1>
     <p class="font-semibold">
-        Simple tool to manage and view Discord slash command
+        Simple tool to manage and view Discord interactions
         for any application.
     </p>  
     <p>
