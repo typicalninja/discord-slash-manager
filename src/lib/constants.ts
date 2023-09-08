@@ -1,7 +1,7 @@
 
 export enum Urls {
     DiscordInvite = "https://discord.gg/ynwckXS9T2",
-    Github = "https://discord.gg/ynwckXS9T2"
+    Github = "https://github.com/typicalninja/discord-slash-manager"
 }
 
 export const discordIdRegex = /^[0-9]{18}$/;
