@@ -2,39 +2,40 @@
 	import { base } from '$app/paths';
 	import { fetchAPI } from '$lib/api';
 	import { typeToName, type DiscordInteraction } from '$lib/constants';
-	import { createQuery, useQueryClient } from '@tanstack/svelte-query'
-  // headers for the table
+	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+	// headers for the table
 	let headers: string[] = ['Name', 'Type', 'Description'];
-  // get basePath since same component can be used to get guild commands
-  export let basePath = '';
-  export let id = 'global';
+	// get basePath since same component can be used to get guild commands
+	export let basePath = '';
+	export let id = 'global';
 
+	const queryClient = useQueryClient();
 
-  $: commandList = createQuery({
-        queryKey: ['app.commands', id],
-        queryFn: async () => (await fetchAPI(basePath)).data,
-  });
+	$: queryKey = ['app.commands', id];
 
-  $: loading = $commandList.isLoading;
+	$: commandList = createQuery({
+		queryKey,
+		queryFn: async () => (await fetchAPI(basePath)).data
+	});
+
+	$: loading = $commandList.isLoading;
 	$: error = $commandList.isError;
 	$: fetching = $commandList.isFetching;
 
-  $: rows = $commandList.data || []
+	$: rows = $commandList.data || [];
 
-
-  async function deleteCommand(cmd: DiscordInteraction) {
-    if(confirm(`Do you want to delete command "${cmd.name}"?"`)) {
-      try {
-        await fetchAPI(`${basePath}/${cmd.id}`, { method: 'DELETE'});
-		alert(`Command: "${cmd.name}" was successfully deleted.`);
-      }
-      catch(err) {
-        alert(`Error deleting command "${cmd.name}" [${err}]`);
-        console.log(`#DeleteCommandError`, err)
-      }
-    }
-  }
-
+	async function deleteCommand(cmd: DiscordInteraction) {
+		if (confirm(`Do you want to delete command "${cmd.name}"?"`)) {
+			try {
+				await fetchAPI(`${basePath}/${cmd.id}`, { method: 'DELETE' });
+				queryClient.invalidateQueries({ queryKey });
+				alert(`Command: "${cmd.name}" was successfully deleted.`);
+			} catch (err) {
+				alert(`Error deleting command "${cmd.name}" [${err}]`);
+				console.log(`#DeleteCommandError`, err);
+			}
+		}
+	}
 </script>
 
 <table class="bg-primary-400 rounded-t-lg min-w-full divide-y divide-primary-600">
@@ -109,7 +110,7 @@
 								/>
 							</svg>
 						</button>
-						<button class="bg-primary-600 hover:bg-primary-500 rounded-full p-2">
+						<button on:click={() => deleteCommand(row)} class="bg-primary-600 hover:bg-primary-500 rounded-full p-2">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
