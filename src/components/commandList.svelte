@@ -2,8 +2,7 @@
 	import { base } from '$app/paths';
 	import { fetchAPI } from '$lib/api';
 	import { typeToName, type DiscordInteraction } from '$lib/constants';
-  import { fetchCommands } from '$lib/user';
-  import { createQuery } from '@tanstack/svelte-query'
+	import { createQuery, useQueryClient } from '@tanstack/svelte-query'
   // headers for the table
 	let headers: string[] = ['Name', 'Type', 'Description'];
   // get basePath since same component can be used to get guild commands
@@ -27,7 +26,7 @@
     if(confirm(`Do you want to delete command "${cmd.name}"?"`)) {
       try {
         await fetchAPI(`${basePath}/${cmd.id}`, { method: 'DELETE'});
-
+		alert(`Command: "${cmd.name}" was successfully deleted.`);
       }
       catch(err) {
         alert(`Error deleting command "${cmd.name}" [${err}]`);

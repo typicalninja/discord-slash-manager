@@ -1,6 +1,6 @@
 <script lang="ts">
     import { base } from '$app/paths';
-	import { Urls } from '$lib/constants';
+	  import { Urls } from '$lib/constants';
 </script>
 
 <div class="m-4 flex flex-col gap-2">
