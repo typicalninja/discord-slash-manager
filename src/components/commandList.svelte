@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { fetchAPI } from '$lib/api';
 	import { typeToName, type DiscordInteraction } from '$lib/constants';
   import { fetchCommands } from '$lib/user';
@@ -73,7 +74,7 @@
 		{#if loading}
 			<tr>
 				<td colspan={headers.length} class="p-4">
-					<img src="/slash.png" alt="loading..." class="animate-spin w-11 h-11 mx-auto" />
+					<img src="{base}/slash.png" alt="loading..." class="animate-spin w-11 h-11 mx-auto" />
 				</td>
 			</tr>
 		{:else if error}

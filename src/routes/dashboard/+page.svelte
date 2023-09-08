@@ -5,10 +5,13 @@
 	import CommandList from '$components/commandList.svelte';
 	import { discordIdRegex } from '$lib/constants';
 	import { goto } from '$app/navigation';
+	import {browser} from "$app/environment";
+	import { base } from '$app/paths';
 
 	const appInfo = get(applicationInfo);
+	$: searchParams = browser && $page.url.searchParams
 
-	$: guildId = $page.url.searchParams.get('guildId') || '';
+	$: guildId = searchParams && searchParams.get('guildId') || '';
 	$: basePath =
 		guildId && discordIdRegex.test(guildId)
 			? `/applications/${appInfo.id}/guilds/${guildId}/commands`
@@ -40,7 +43,7 @@
                 You are currently viewing the list for specific guild with id "{guildId}"
                 Click the below button to view the global list
             </p>
-			<a href="/dashboard" class="bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg"
+			<a href="{base}/dashboard" class="bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg"
 				>View global commands</a
 			>
 		{:else}

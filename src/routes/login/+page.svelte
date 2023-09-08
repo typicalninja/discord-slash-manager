@@ -6,6 +6,7 @@
     import { fetchUser } from '$lib/user';
     import { discordIdRegex } from '$lib/constants';
 	import { getAccessToken } from '$lib/api';
+	import { base } from '$app/paths';
 
     let auth = get(authStore);
 
@@ -34,7 +35,7 @@
                 id
             });
 
-            goto('/dashboard')
+            goto(`${base}/dashboard`)
         }
         catch(err) {
             console.log('Error while verifying', err)
@@ -47,7 +48,7 @@
 
     onMount(() => {
         // if token is present immediately redirect to the dashboard
-        if(auth.accessToken !== '') goto('/dashboard')
+        if(auth.accessToken !== '') goto(`${base}/dashboard`)
     });
 
 </script>

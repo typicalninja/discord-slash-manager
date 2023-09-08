@@ -11,10 +11,10 @@
     </a>
     <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
         <div class="text-sm lg:flex-grow">
-          <a href="#responsive-header" class="block mt-4 lg:inline-block font-semibold lg:mt-0 text-blurple-200 hover:underline mr-4">
+         <!-- <a href="#responsive-header" class="block mt-4 lg:inline-block font-semibold lg:mt-0 text-blurple-200 hover:underline mr-4">
             Add command
-          </a>
-          <a href="/dashboard" class="block mt-4 lg:inline-block lg:mt-0 font-semibold text-blurple-200 hover:underline mr-4">
+          </a> -->
+          <a href="{base}/dashboard" class="block mt-4 lg:inline-block lg:mt-0 font-semibold text-blurple-200 hover:underline mr-4">
             Dashboard
           </a>
         </div>

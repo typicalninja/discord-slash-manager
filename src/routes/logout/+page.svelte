@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
     import { goto } from '$app/navigation'
+	import { base } from '$app/paths';
 
     let auth = get(authStore);
 
@@ -10,11 +11,11 @@
         authStore.update((p) => ({ ...p, accessToken: '' }))
         applicationInfo.set({ username: '', discriminator: '', id: '' });
         // redirect to login
-        goto('/login');
+        goto(`${base}/login`);
     }
 
     onMount(() => {
-        if(auth.accessToken === '') goto('/login')
+        if(auth.accessToken === '') goto(`${base}/login`)
     });
     
 </script>
