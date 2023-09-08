@@ -1,0 +1,1 @@
+var e=(t=>(t.DiscordInvite="https://discord.gg/ynwckXS9T2",t.Github="https://github.com/typicalninja/discord-slash-manager",t))(e||{});const s=/^[0-9]{18}$/;function n(t){switch(t){case 1:return"Chat Input";case 2:return"User";case 3:return"Message";default:return"Unknown"}}export{e as U,s as d,n as t};
