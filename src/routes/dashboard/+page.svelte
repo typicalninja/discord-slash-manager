@@ -58,6 +58,8 @@
                 and click the button to manage guild specific interactions
             </p>
 			<input
+				id="guildId"
+				name="guildId"
 				bind:value={guildInput}
 				class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none"
 			/>

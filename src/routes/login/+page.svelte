@@ -80,8 +80,8 @@
             everything you do is only recorded to the <span class="font-bold">localStorage</span> and can be deleted if you need to.
         </p>
         <p>Get your application credentials from here <a href="https://discord.com/developers/applications" class="text-blurple-200 hover:underline">discord.com/developers/applications</a></p>
-        <input type="text" readonly={loggingIn} bind:value={clientId} placeholder="Client Id" class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" />
-        <input type="password" readonly={loggingIn} bind:value={clientSecret} placeholder="Client Secret" class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" />
+        <input type="text" id="clientId" readonly={loggingIn} bind:value={clientId} placeholder="Client Id" class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" />
+        <input type="password" id="clientSecret" readonly={loggingIn} bind:value={clientSecret} placeholder="Client Secret" class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" />
         <button on:click={LoginWrapper} disabled={loginBlocked || loggingIn} class="{loggingIn|| loginBlocked ? 'bg-primary-600 cursor-not-allowed' : 'bg-blurple-600 hover:bg-blurple-700'} p-2 rounded-lg">Login with token 🚀</button>
     </div>
 </div>

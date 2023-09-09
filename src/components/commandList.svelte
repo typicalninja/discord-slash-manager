@@ -5,6 +5,7 @@
 	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
+	import { DataHandler, Th, Datatable, ThFilter }  from '@vincjo/datatables'
 
 	// headers for the table
 	let headers: string[] = ['Name', 'Type', 'Description'];
@@ -15,6 +16,7 @@
 	const queryClient = useQueryClient()
 
 	$: queryKey = ['app.commands', id];
+	$: refreshing = false;
 
 	$: commandList = createQuery({
 		queryKey,
@@ -25,7 +27,10 @@
 	$: error = $commandList.isError;
 	$: fetching = $commandList.isFetching;
 
-	$: rows = $commandList.data || [];
+	$: data = $commandList.data || [];
+
+	$: handler = new DataHandler(data, { rowsPerPage: 10 })
+    $: rows = handler.getRows()
 
 	// delete a interaction
 	async function deleteInteraction(interaction: DiscordInteraction) {
@@ -37,7 +42,7 @@
 					label: 'Delete',
 					onClick: () => {
 						toast.promise(
-							fetchAPI(`${basePath}/${interaction.id}`, { method: 'DELETE' }).then(() => { queryClient.invalidateQueries({ queryKey }) }),
+							fetchAPI(`${basePath}/${interaction.id}`, { method: 'DELETE' }).then(refreshList),
 							{
 								success: `${typeToName(interaction.type)} (${interaction.name}) successfully deleted`,
 								error: 'Error occurred, try again',
@@ -50,19 +55,33 @@
 			}
 		);
 	}
+	
+	async function refreshList() {
+		if(refreshing) return;
+		refreshing = true;
+		queryClient.invalidateQueries({ queryKey })
+		setTimeout(() => {
+			// cooldown
+			refreshing = false
+		}, 2000);
+
+	}
 </script>
 
-<table class="bg-primary-400 rounded-t-lg min-w-full divide-y divide-primary-600">
+<Datatable {handler} class="bg-primary-800 text-white rounded-t-lg rounded-b-lg  min-w-full divide-y divide-primary-600">
+<table>
 	<thead>
 		<tr class="shadow-md shadow-primary-700">
 			{#each headers as header (header)}
-				<th
+				<Th
+					orderBy={header.toLowerCase()}
+					{handler}
 					scope="col"
 					class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider"
-					>{header}</th
+					>{header}</Th
 				>
 			{/each}
-			<th scope="col" class="px-6 py-3 text-xs font-bold text-stone-400 tracking-wider">
+			<Th {handler} orderBy="" class="px-6 py-3 flex gap-2 text-xs font-bold text-stone-400 tracking-wider">
 				<button
 					on:click={() => goto(`${base}/add${id === 'global' ? '' : `?guildId=${id}`}`)}
 					class="bg-primary-600 hover:bg-primary-500 rounded-full p-2"
@@ -80,10 +99,31 @@
 						class="text-green-500"><path d="M5 12h14" /><path d="M12 5v14" /></svg
 					>
 				</button>
-			</th>
+				<button
+					on:click={refreshList}
+					disabled={refreshing}
+					class="bg-primary-600 hover:bg-primary-500 rounded-full p-2"
+				>
+					<svg class="{refreshing && 'animate-spin cursor-not-allowed'} text-yellow-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+				</button>
+			</Th>
+		</tr>
+		<tr>
+			{#each headers as header (header)}
+				<ThFilter
+					filterBy={header.toLowerCase()}
+					{handler}
+					scope="col"
+					class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider"
+					>{header}</ThFilter
+				>
+			{/each}
+			<Th {handler} orderBy="" class="px-6 py-3 text-xs font-bold text-stone-400 tracking-wider">
+				<!-- EMPTY -->
+			</Th>
 		</tr>
 	</thead>
-	<tbody class="rounded-b-lg divide-y divide-primary-100">
+	<tbody>
 		<!-- Status stuff -->
 		{#if loading}
 			<tr>
@@ -100,7 +140,7 @@
 					</div>
 				</td>
 			</tr>
-		{:else if rows.length == 0}
+		{:else if $rows.length == 0}
 			<tr>
 				<td colspan={headers.length + 1} class="p-4">
 					<div class="w-max h-11 mx-auto flex flex-col justify-center items-center">
@@ -111,12 +151,12 @@
 			</tr>
 		{:else}
 			<!-- Table content -->
-			{#each rows as row (row.id)}
+			{#each $rows as row (row.id)}
 				<tr>
-					<td class="px-4 py-4 whitespace-nowrap font-bold font-mono">{row.name}</td>
-					<td class="px-4 py-4 whitespace-nowrap font-semibold">{typeToName(row.type)}</td>
-					<td class="px-4 py-4 whitespace-nowrap">{row.description}</td>
-					<td class="px-4 py-4 whitespace-nowrap flex justify-center items-center gap-2">
+					<td class="border-b-2 border-primary-400 px-4 py-4 whitespace-nowrap font-bold font-mono">{row.name}</td>
+					<td class="border-b-2 border-primary-400 px-4 py-4 whitespace-nowrap font-semibold">{typeToName(row.type)}</td>
+					<td class="border-b-2 border-primary-400 px-4 py-4 whitespace-nowrap">{row.description}</td>
+					<td class="border-b-2 border-primary-400 px-4 py-4 whitespace-nowrap flex justify-center items-center gap-2">
 						<button class="bg-primary-600 hover:bg-primary-500 rounded-full p-2">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -159,39 +199,14 @@
 
 		<!-- Table bottom, status bar -->
 		<tr class="opacity-75">
-			<td colspan={headers.length + 1} class="p-2">
+			<td colspan={headers.length + 1} class="p-4 bg-primary-700 border-primary-400">
 				{#if fetching && !loading}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="text-yellow-500 h-7 w-7 mx-auto animate-spin"
-						><path d="M5 22h14" /><path d="M5 2h14" /><path
-							d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"
-						/><path
-							d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"
-						/></svg
-					>
+					<svg class="animate-spin text-yellow-300 h-7 w-7 mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
 				{:else if !loading && !error}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="text-green-500 h-7 w-7 mx-auto"
-						><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline
-							points="22 4 12 14.01 9 11.01"
-						/></svg
-					>
+					<svg class="animate-bounce text-green-300 h-7 w-7 mx-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
 				{/if}
 			</td>
 		</tr>
 	</tbody>
 </table>
+</Datatable>
