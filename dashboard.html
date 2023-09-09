@@ -6,36 +6,34 @@
 		<meta name="viewport" content="width=device-width" />
 		<title>Discord Slash Manager</title>
 		
-		<link href="./_app/immutable/assets/0.796a26cd.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/0.ef9e7e3b.css" rel="stylesheet">
 		<link href="./_app/immutable/assets/Toaster.37b6ac62.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/entry/start.ac67652e.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.80efcbe1.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.aa8d52cf.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index.46075f7c.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/paths.e13e6876.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.04a37404.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index.27e9b36e.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/0.80f229d1.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/localStore.6c964045.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/context.33bfa983.js">
+		<link href="./_app/immutable/assets/4.d02ffb26.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.904ca7d1.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.77d1f02c.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.4f7451d0.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.447c080f.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/paths.821a4309.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.0eef290e.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.b0260750.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.ba531597.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/localStore.7bebcd46.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/context.98072e28.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/Toaster.svelte_svelte_type_style_lang.7ad7c14e.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/4.ea9fc586.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/stores.e380adb8.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/api.c0e61cdf.js">
 		<link rel="modulepreload" href="./_app/immutable/chunks/constants.85e98373.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/4.f8cdb332.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/stores.83cc33f5.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/api.379eae5e.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/navigation.b6010dac.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/navigation.2f0d91f3.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">  <div class="hidden lg:flex bg-primary-500 text-white min-h-screen flex-col gap-2 overflow-x-hidden"> <nav class="flex items-center justify-between flex-wrap shadow-primary-900 shadow-sm w-screen h-max p-4"><a href="/discord-slash-manager/" class="flex items-center flex-shrink-0 text-white gap-1 mr-6" data-svelte-h="svelte-kqqfca"><img height="20" width="20" src="/discord-slash-manager/slash.png" alt="Project Logo (Slash command @ Discord)"> <h2 class="font-bold font-mono">Slash Manager</h2></a> <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto"><div class="text-sm lg:flex-grow" data-svelte-h="svelte-1pkzsxf"> <a href="/discord-slash-manager/dashboard" class="block mt-4 lg:inline-block lg:mt-0 font-semibold text-blurple-200 hover:underline mr-4">Dashboard</a></div> <div><a href="/discord-slash-manager/login" class="text-md px-3 py-2 font-semibold rounded text-secondary-200 bg-green-500 mt-4 invisible lg:visible" data-svelte-h="svelte-mr433o">Login</a></div></div></nav> <div class="m-5 flex flex-col gap-2"><span><h1 class="font-bold font-mono text-3xl text-pink-300">Logged in for #</h1> <p class="text-sm font-medium text-primary-100">In global view</p></span> <table class="bg-primary-400 rounded-t-lg min-w-full divide-y divide-primary-600"><thead><tr class="shadow-md shadow-primary-700"><th scope="col" class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider">Name</th><th scope="col" class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider">Type</th><th scope="col" class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider">Description</th> <th scope="col" class="px-6 py-3 text-xs font-bold text-stone-400 tracking-wider"><button class="bg-primary-600 hover:bg-primary-500 rounded-full p-2" data-svelte-h="svelte-1lvgcje"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button></th></tr></thead> <tbody class="rounded-b-lg divide-y divide-primary-100"> <tr><td colspan="4" class="p-4"><img src="/discord-slash-manager/slash.png" alt="loading..." class="animate-spin w-11 h-11 mx-auto"></td></tr>  <tr class="opacity-75"><td colspan="4" class="p-2"></td></tr></tbody></table> <div class="bg-primary-900 flex flex-col p-2 rounded-lg gap-2"><h1 data-svelte-h="svelte-1uuz0mm">View Guild commands</h1> <p data-svelte-h="svelte-1xj1ath">You are currently viewing the global list.
+		<div style="display: contents">  <div class="lg:flex bg-primary-500 text-white min-h-screen flex-col gap-2 overflow-x-hidden"> <nav class="flex items-center justify-between flex-wrap shadow-primary-900 shadow-sm w-screen h-max p-4"><a href="/discord-slash-manager/" class="flex items-center flex-shrink-0 text-white gap-1 mr-6" data-svelte-h="svelte-kqqfca"><img height="20" width="20" src="/discord-slash-manager/slash.png" alt="Project Logo (Slash command @ Discord)"> <h2 class="font-bold font-mono">Slash Manager</h2></a> <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto"><div class="text-sm lg:flex-grow" data-svelte-h="svelte-1pkzsxf"> <a href="/discord-slash-manager/dashboard" class="block mt-4 lg:inline-block lg:mt-0 font-semibold text-blurple-200 hover:underline mr-4">Dashboard</a></div> <div><a href="/discord-slash-manager/login" class="text-md px-3 py-2 font-semibold rounded text-secondary-200 bg-green-500 mt-4 invisible lg:visible" data-svelte-h="svelte-mr433o">Login</a></div></div></nav> <div class="m-5 flex flex-col gap-2"><span><h1 class="font-bold font-mono text-3xl text-pink-300">Logged in for #</h1> <p class="text-sm font-medium text-primary-100">In global view</p></span> <section class="bg-primary-800 text-white rounded-t-lg rounded-b-lg  min-w-full divide-y divide-primary-600 svelte-1ere01f"><header class="svelte-1ere01f container"><input class=" svelte-ykkz3r" placeholder="Search..." spellcheck="false" value=""> <aside class=" svelte-18tth2v"><span>Show</span> <select class="svelte-18tth2v"><option value="5">5 </option><option value="10">10 </option><option value="20">20 </option><option value="50">50 </option><option value="100">100 </option></select> <span>entries</span> </aside></header> <article style="height:calc(100% - 96px)" class="svelte-1ere01f"><table><thead><tr class="shadow-md shadow-primary-700"><th class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider svelte-1311rr9 sortable"><div class="flex svelte-1311rr9" style="justify-content: flex-start;"><strong class="svelte-1311rr9">Name</strong> <span class="svelte-1311rr9"></span></div> </th><th class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider svelte-1311rr9 sortable"><div class="flex svelte-1311rr9" style="justify-content: flex-start;"><strong class="svelte-1311rr9">Type</strong> <span class="svelte-1311rr9"></span></div> </th><th class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider svelte-1311rr9 sortable"><div class="flex svelte-1311rr9" style="justify-content: flex-start;"><strong class="svelte-1311rr9">Description</strong> <span class="svelte-1311rr9"></span></div> </th> <th class="px-6 py-3 flex gap-2 text-xs font-bold text-stone-400 tracking-wider svelte-1311rr9"><div class="flex svelte-1311rr9" style="justify-content: flex-start;"><strong class="svelte-1311rr9"><button class="bg-primary-600 hover:bg-primary-500 rounded-full p-2" data-svelte-h="svelte-1lvgcje"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button> <button  class="bg-primary-600 hover:bg-primary-500 rounded-full p-2"><svg class="false text-yellow-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg></button></strong> <span class="svelte-1311rr9"></span></div> </th></tr> <tr><th class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider svelte-11i3j5h"><input type="text" placeholder="Filter" spellcheck="false" class="svelte-11i3j5h" style="text-align: left;" value=""> </th><th class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider svelte-11i3j5h"><input type="text" placeholder="Filter" spellcheck="false" class="svelte-11i3j5h" style="text-align: left;" value=""> </th><th class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider svelte-11i3j5h"><input type="text" placeholder="Filter" spellcheck="false" class="svelte-11i3j5h" style="text-align: left;" value=""> </th> <th class="px-6 py-3 text-xs font-bold text-stone-400 tracking-wider svelte-1311rr9"><div class="flex svelte-1311rr9" style="justify-content: flex-start;"><strong class="svelte-1311rr9"></strong> <span class="svelte-1311rr9"></span></div> </th></tr></thead> <tbody> <tr><td colspan="4" class="p-4"><img src="/discord-slash-manager/slash.png" alt="loading..." class="animate-spin w-11 h-11 mx-auto"></td></tr>  <tr class="opacity-75"><td colspan="4" class="p-4 bg-primary-700 border-primary-400"></td></tr></tbody></table></article> <footer class="svelte-1ere01f container"><aside class=" svelte-1tjrquk">No entries found </aside> <section class=" svelte-9sqfh3"><button type="button" class="svelte-9sqfh3 disabled"><!-- HTML_TAG_START -->Previous<!-- HTML_TAG_END --></button>  <button type="button" class="svelte-9sqfh3"><!-- HTML_TAG_START -->Next<!-- HTML_TAG_END --></button> </section></footer> </section> <div class="bg-primary-900 flex flex-col p-2 rounded-lg gap-2"><h1 data-svelte-h="svelte-1uuz0mm">View Guild commands</h1> <p data-svelte-h="svelte-1xj1ath">You are currently viewing the global list.
                 Enter a guild id (your bot must be invited to it)
-                and click the button to manage guild specific interactions</p> <input class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" value=""> <button disabled class="bg-primary-600 cursor-not-allowed p-2 rounded-lg">View Guild Interaction</button></div></div></div> <div class="lg:hidden p-2 bg-primary-500 text-white min-h-screen flex-col flex justify-center items-center" data-svelte-h="svelte-1g8sucj"><h1>Site unsupported!</h1> <p>You appear to be using a mobile device or browser with a minimized screen size
-            unfortunately we do not support this screen size.
-
-            Please use a desktop to access this site.</p> <a href="https://github.com/typicalninja/discord-slash-manager" class="text-blurple-500 underline">Github for issues</a></div> 
+                and click the button to manage guild specific interactions</p> <input id="guildId" name="guildId" class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" value=""> <button disabled class="bg-primary-600 cursor-not-allowed p-2 rounded-lg">View Guild Interaction</button></div></div></div> 
 			
 			<script>
 				{
-					__sveltekit_1quod96 = {
+					__sveltekit_b6auqj = {
 						assets: "/discord-slash-manager",
 						base: new URL(".", location).pathname.slice(0, -1),
 						env: {}
@@ -46,8 +44,8 @@
 					const data = [null,null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.ac67652e.js"),
-						import("./_app/immutable/entry/app.04a37404.js")
+						import("./_app/immutable/entry/start.904ca7d1.js"),
+						import("./_app/immutable/entry/app.0eef290e.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 4],
