@@ -7,7 +7,7 @@
 	import { goto } from '$app/navigation';
 	import {browser} from "$app/environment";
 	import { base } from '$app/paths';
-	import toast from 'svelte-french-toast';
+	import { toast } from 'svelte-sonner';
 
 	const appInfo = get(applicationInfo);
 	$: searchParams = browser && $page.url.searchParams
@@ -22,9 +22,7 @@
 
 	function viewGuildCommands() {
 		if (!discordIdRegex.test(guildInput)) return toast.error(`The guild id is invalid, try again`)
-		toast(`Viewing guild "${guildInput}"`, {
-				icon: '🌏'
-		})
+		toast.info(`Viewing guild "${guildInput}"`)
 		guildId = guildInput
 		goto(`?guildId=${guildInput}`);
 	}

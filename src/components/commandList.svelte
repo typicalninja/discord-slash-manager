@@ -2,9 +2,8 @@
 	import { base } from '$app/paths';
 	import { fetchAPI } from '$lib/api';
 	import { typeToName, type DiscordInteraction } from '$lib/constants';
-	import { createQuery } from '@tanstack/svelte-query';
-	import toast from 'svelte-french-toast';
-	import DeleteConfirm from './DeleteConfirm.svelte';
+	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
 
 	// headers for the table
@@ -12,6 +11,8 @@
 	// get basePath since same component can be used to get guild commands
 	export let basePath = '';
 	export let id = 'global';
+
+	const queryClient = useQueryClient()
 
 	$: queryKey = ['app.commands', id];
 
@@ -26,14 +27,29 @@
 
 	$: rows = $commandList.data || [];
 
-	async function deleteCommand(cmd: DiscordInteraction) {
-		//@ts-ignore props are allowed in toasts
-		toast(DeleteConfirm, { props: { cmd, basePath, queryKey, duration: 6000,  } });
+	// delete a interaction
+	async function deleteInteraction(interaction: DiscordInteraction) {
+		// uses toast for confirmation
+		toast.warning(
+			`Are you sure you want to delete "${interaction.name}" ${typeToName(interaction.type)} Interaction?`,
+			{
+				action: {
+					label: 'Delete',
+					onClick: () => {
+						toast.promise(
+							fetchAPI(`${basePath}/${interaction.id}`, { method: 'DELETE' }).then(() => { queryClient.invalidateQueries({ queryKey }) }),
+							{
+								success: `${typeToName(interaction.type)} (${interaction.name}) successfully deleted`,
+								error: 'Error occurred, try again',
+								loading: 'Deletion pending...'
+							} as any
+						);
+
+					}
+				}
+			}
+		);
 	}
-
-
-
-
 </script>
 
 <table class="bg-primary-400 rounded-t-lg min-w-full divide-y divide-primary-600">
@@ -46,24 +62,24 @@
 					>{header}</th
 				>
 			{/each}
-			<th
-				scope="col"
-				class="px-6 py-3 text-xs font-bold text-stone-400 tracking-wider"
-			>
-					<button on:click={() => goto(`${base}/add${id === 'global' ? '' : `?guildId=${id}`}`)} class="bg-primary-600 hover:bg-primary-500 rounded-full p-2">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="text-green-500"><path d="M5 12h14" /><path d="M12 5v14" /></svg
-						>
-					</button>
+			<th scope="col" class="px-6 py-3 text-xs font-bold text-stone-400 tracking-wider">
+				<button
+					on:click={() => goto(`${base}/add${id === 'global' ? '' : `?guildId=${id}`}`)}
+					class="bg-primary-600 hover:bg-primary-500 rounded-full p-2"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="text-green-500"><path d="M5 12h14" /><path d="M12 5v14" /></svg
+					>
+				</button>
 			</th>
 		</tr>
 	</thead>
@@ -71,32 +87,31 @@
 		<!-- Status stuff -->
 		{#if loading}
 			<tr>
-				<td colspan={headers.length} class="p-4">
+				<td colspan={headers.length + 1} class="p-4">
 					<img src="{base}/slash.png" alt="loading..." class="animate-spin w-11 h-11 mx-auto" />
 				</td>
 			</tr>
 		{:else if error}
 			<tr>
-				<td colspan={headers.length} class="p-4">
+				<td colspan={headers.length + 1} class="p-4">
 					<div class="w-max h-11 mx-auto flex flex-col justify-center items-center">
 						<p class="font-bold text-lg">(╯°□°）╯︵ ┻━┻</p>
 						<span class="text-red-400 font-bold">Oops! Something went wrong.</span>
 					</div>
 				</td>
 			</tr>
-		{:else}
-			{#if rows.length == 0}
+		{:else if rows.length == 0}
 			<tr>
-				<td colspan={headers.length} class="p-4">
+				<td colspan={headers.length + 1} class="p-4">
 					<div class="w-max h-11 mx-auto flex flex-col justify-center items-center">
 						<p class="font-bold text-lg">¯\_(ツ)_/¯</p>
 						<span class="text-yellow-200 font-bold">Nothing to display here.</span>
 					</div>
 				</td>
 			</tr>
-			{:else}
-				<!-- Table content -->
-				{#each rows as row (row.id)}
+		{:else}
+			<!-- Table content -->
+			{#each rows as row (row.id)}
 				<tr>
 					<td class="px-4 py-4 whitespace-nowrap font-bold font-mono">{row.name}</td>
 					<td class="px-4 py-4 whitespace-nowrap font-semibold">{typeToName(row.type)}</td>
@@ -118,7 +133,10 @@
 								/>
 							</svg>
 						</button>
-						<button on:click={() => deleteCommand(row)} class="bg-primary-600 hover:bg-primary-500 rounded-full p-2">
+						<button
+							on:click={() => deleteInteraction(row)}
+							class="bg-primary-600 hover:bg-primary-500 rounded-full p-2"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
@@ -136,13 +154,12 @@
 						</button>
 					</td>
 				</tr>
-				{/each}
-			{/if}
+			{/each}
 		{/if}
 
 		<!-- Table bottom, status bar -->
 		<tr class="opacity-75">
-			<td colspan={headers.length} class="p-2">
+			<td colspan={headers.length + 1} class="p-2">
 				{#if fetching && !loading}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

@@ -36,6 +36,7 @@
 		"@tanstack/svelte-query": "^4.35.0",
 		"axios": "^1.5.0",
 		"svelte-french-toast": "^1.2.0",
-		"svelte-local-storage-store": "^0.6.0"
+		"svelte-local-storage-store": "^0.6.0",
+		"svelte-sonner": "^0.1.4"
 	}
 }

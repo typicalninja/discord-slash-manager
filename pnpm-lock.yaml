@@ -17,6 +17,9 @@ dependencies:
   svelte-local-storage-store:
     specifier: ^0.6.0
     version: 0.6.0(svelte@4.2.0)
+  svelte-sonner:
+    specifier: ^0.1.4
+    version: 0.1.4(svelte@4.2.0)
 
 devDependencies:
   '@sveltejs/adapter-auto':
@@ -2138,6 +2141,14 @@ packages:
       svelte: 4.2.0
       typescript: 5.2.2
     dev: true
+
+  /svelte-sonner@0.1.4(svelte@4.2.0):
+    resolution: {integrity: sha512-3aJmd4xiJsUcs0qGj+PvQ0YlHiQJnaqM2sUQ9CCgQ3plyGqzlxOwu+Svf1y8nk7yIPijMRO8jjekVfqGnbUa4Q==}
+    peerDependencies:
+      svelte: ^4.0.0
+    dependencies:
+      svelte: 4.2.0
+    dev: false
 
   /svelte-writable-derived@3.1.0(svelte@4.2.0):
     resolution: {integrity: sha512-cTvaVFNIJ036vSDIyPxJYivKC7ZLtcFOPm1Iq6qWBDo1fOHzfk6ZSbwaKrxhjgy52Rbl5IHzRcWgos6Zqn9/rg==}

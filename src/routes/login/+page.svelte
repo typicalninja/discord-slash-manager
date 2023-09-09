@@ -7,7 +7,7 @@
     import { discordIdRegex } from '$lib/constants';
 	import { getAccessToken } from '$lib/api';
 	import { base } from '$app/paths';
-    import toast from 'svelte-french-toast';
+    import { toast } from 'svelte-sonner'
 
     let auth = get(authStore);
 
@@ -20,9 +20,6 @@
 
     async function login() {
         if(loginBlocked) return;
-        if(!discordIdRegex.test(clientId)) {
-             throw new Error(`Client ID is invalid`)
-        }
         loggingIn = true;
         authStore.update((p) => ({ ...p, clientId, clientSecret }))
         try {
@@ -45,22 +42,30 @@
             console.log('Error while verifying', err)
             authStore.update((p) => ({ ...p, accessToken: '' }))
             loggingIn = false;
+            toast.error('Error occurred while logging in');
+            toast.error(`${err}`)
             throw new Error('Failed to login')
-          //  alert('Verification failed, try again (check your credentials)')
         }
     }
 
     async function LoginWrapper() {
+        if(!discordIdRegex.test(clientId)) {
+             return toast.error(`Client ID is invalid`)
+        }
         toast.promise(login(), {
             loading: 'Logging in...',
-            success: 'Logged in, please wait...',
+            success: 'Logged in, redirecting...',
             error: 'Could not log in, check your credentials',
-        })
+            // why ??? check later
+        } as any)
     }
 
     onMount(() => {
         // if token is present immediately redirect to the dashboard
-        if(auth.accessToken !== '') goto(`${base}/dashboard`)
+        if(auth.accessToken !== '') {
+            toast.success('Already logged in, redirecting')
+            goto(`${base}/dashboard`)
+        }
     });
 
 </script>
