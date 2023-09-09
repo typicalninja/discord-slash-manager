@@ -7,11 +7,12 @@
 	import { goto } from '$app/navigation';
 	import {browser} from "$app/environment";
 	import { base } from '$app/paths';
+	import toast from 'svelte-french-toast';
 
 	const appInfo = get(applicationInfo);
 	$: searchParams = browser && $page.url.searchParams
 
-	$: guildId = searchParams && searchParams.get('guildId') || '';
+	$: guildId = searchParams && searchParams.get('guildId') || "global";
 	$: basePath =
 		guildId && discordIdRegex.test(guildId)
 			? `/applications/${appInfo.id}/guilds/${guildId}/commands`
@@ -20,10 +21,15 @@
 	let guildInput = '';
 
 	function viewGuildCommands() {
-		if (!discordIdRegex.test(guildInput)) return alert(`Invalid guild id`);
-        guildId = guildInput
+		if (!discordIdRegex.test(guildInput)) return toast.error(`The guild id is invalid, try again`)
+		toast(`Viewing guild "${guildInput}"`, {
+				icon: '🌏'
+		})
+		guildId = guildInput
 		goto(`?guildId=${guildInput}`);
 	}
+
+
 </script>
 
 <div class="m-5 flex flex-col gap-2">
@@ -36,7 +42,7 @@
 		</p>
 	</span>
 	<CommandList bind:id={guildId} {basePath} />
-	<div class="bg-blurple-900 flex flex-col p-2 rounded-lg gap-2">
+	<div class="bg-primary-900 flex flex-col p-2 rounded-lg gap-2">
 		{#if guildId && discordIdRegex.test(guildId)}
 			<h1>View Global List</h1>
             <p>
@@ -50,7 +56,7 @@
 			<h1>View Guild commands</h1>
             <p>
                 You are currently viewing the global list.
-                Enter a guild id (you bot must be invited to it)
+                Enter a guild id (your bot must be invited to it)
                 and click the button to manage guild specific interactions
             </p>
 			<input
@@ -62,7 +68,7 @@
 				disabled={guildInput === ''}
 				class="{guildInput === ''
 					? 'bg-primary-600 cursor-not-allowed'
-					: 'bg-emerald-500 hover:bg-emerald-600'} p-2 rounded-lg">View guild commands</button
+					: 'bg-blurple-500 hover:bg-blurple-600'} p-2 rounded-lg">View Guild Interaction</button
 			>
 		{/if}
 	</div>

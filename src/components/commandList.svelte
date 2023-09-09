@@ -2,14 +2,16 @@
 	import { base } from '$app/paths';
 	import { fetchAPI } from '$lib/api';
 	import { typeToName, type DiscordInteraction } from '$lib/constants';
-	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+	import { createQuery } from '@tanstack/svelte-query';
+	import toast from 'svelte-french-toast';
+	import DeleteConfirm from './DeleteConfirm.svelte';
+	import { goto } from '$app/navigation';
+
 	// headers for the table
 	let headers: string[] = ['Name', 'Type', 'Description'];
 	// get basePath since same component can be used to get guild commands
 	export let basePath = '';
 	export let id = 'global';
-
-	const queryClient = useQueryClient();
 
 	$: queryKey = ['app.commands', id];
 
@@ -25,17 +27,13 @@
 	$: rows = $commandList.data || [];
 
 	async function deleteCommand(cmd: DiscordInteraction) {
-		if (confirm(`Do you want to delete command "${cmd.name}"?"`)) {
-			try {
-				await fetchAPI(`${basePath}/${cmd.id}`, { method: 'DELETE' });
-				queryClient.invalidateQueries({ queryKey });
-				alert(`Command: "${cmd.name}" was successfully deleted.`);
-			} catch (err) {
-				alert(`Error deleting command "${cmd.name}" [${err}]`);
-				console.log(`#DeleteCommandError`, err);
-			}
-		}
+		//@ts-ignore props are allowed in toasts
+		toast(DeleteConfirm, { props: { cmd, basePath, queryKey, duration: 6000,  } });
 	}
+
+
+
+
 </script>
 
 <table class="bg-primary-400 rounded-t-lg min-w-full divide-y divide-primary-600">
@@ -50,22 +48,22 @@
 			{/each}
 			<th
 				scope="col"
-				class="px-6 py-3 text-left text-xs font-bold text-stone-400 uppercase tracking-wider"
+				class="px-6 py-3 text-xs font-bold text-stone-400 tracking-wider"
 			>
-				<button class="bg-primary-600 hover:bg-primary-500 rounded-full p-2">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="text-green-500"><path d="M5 12h14" /><path d="M12 5v14" /></svg
-					>
-				</button>
+					<button on:click={() => goto(`${base}/add${id === 'global' ? '' : `?guildId=${id}`}`)} class="bg-primary-600 hover:bg-primary-500 rounded-full p-2">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="text-green-500"><path d="M5 12h14" /><path d="M12 5v14" /></svg
+						>
+					</button>
 			</th>
 		</tr>
 	</thead>
@@ -80,15 +78,25 @@
 		{:else if error}
 			<tr>
 				<td colspan={headers.length} class="p-4">
-					<div class="w-max h-11 text-center mx-auto">
-						<p>(╯°□°）╯︵ ┻━┻</p>
+					<div class="w-max h-11 mx-auto flex flex-col justify-center items-center">
+						<p class="font-bold text-lg">(╯°□°）╯︵ ┻━┻</p>
 						<span class="text-red-400 font-bold">Oops! Something went wrong.</span>
 					</div>
 				</td>
 			</tr>
 		{:else}
-			<!-- Table content -->
-			{#each rows as row (row.id)}
+			{#if rows.length == 0}
+			<tr>
+				<td colspan={headers.length} class="p-4">
+					<div class="w-max h-11 mx-auto flex flex-col justify-center items-center">
+						<p class="font-bold text-lg">¯\_(ツ)_/¯</p>
+						<span class="text-yellow-200 font-bold">Nothing to display here.</span>
+					</div>
+				</td>
+			</tr>
+			{:else}
+				<!-- Table content -->
+				{#each rows as row (row.id)}
 				<tr>
 					<td class="px-4 py-4 whitespace-nowrap font-bold font-mono">{row.name}</td>
 					<td class="px-4 py-4 whitespace-nowrap font-semibold">{typeToName(row.type)}</td>
@@ -128,7 +136,8 @@
 						</button>
 					</td>
 				</tr>
-			{/each}
+				{/each}
+			{/if}
 		{/if}
 
 		<!-- Table bottom, status bar -->
@@ -150,7 +159,7 @@
 							d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"
 						/></svg
 					>
-				{:else if !loading}
+				{:else if !loading && !error}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 24 24"

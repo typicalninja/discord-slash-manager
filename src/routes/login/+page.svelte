@@ -7,6 +7,7 @@
     import { discordIdRegex } from '$lib/constants';
 	import { getAccessToken } from '$lib/api';
 	import { base } from '$app/paths';
+    import toast from 'svelte-french-toast';
 
     let auth = get(authStore);
 
@@ -19,7 +20,9 @@
 
     async function login() {
         if(loginBlocked) return;
-        if(!discordIdRegex.test(clientId)) return alert(`Id is invalid.`)
+        if(!discordIdRegex.test(clientId)) {
+             throw new Error(`Client ID is invalid`)
+        }
         loggingIn = true;
         authStore.update((p) => ({ ...p, clientId, clientSecret }))
         try {
@@ -35,15 +38,24 @@
                 id
             });
 
-            goto(`${base}/dashboard`)
+            loggingIn = false;
+           return goto(`${base}/dashboard`)
         }
         catch(err) {
             console.log('Error while verifying', err)
             authStore.update((p) => ({ ...p, accessToken: '' }))
-            alert('Verification failed, try again (check your credentials)')
+            loggingIn = false;
+            throw new Error('Failed to login')
+          //  alert('Verification failed, try again (check your credentials)')
         }
+    }
 
-        loggingIn = false;
+    async function LoginWrapper() {
+        toast.promise(login(), {
+            loading: 'Logging in...',
+            success: 'Logged in, please wait...',
+            error: 'Could not log in, check your credentials',
+        })
     }
 
     onMount(() => {
@@ -65,7 +77,6 @@
         <p>Get your application credentials from here <a href="https://discord.com/developers/applications" class="text-blurple-200 hover:underline">discord.com/developers/applications</a></p>
         <input type="text" readonly={loggingIn} bind:value={clientId} placeholder="Client Id" class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" />
         <input type="password" readonly={loggingIn} bind:value={clientSecret} placeholder="Client Secret" class="bg-primary-500 rounded-md p-2 focus:ring-0 focus:ring-offset-0 focus:outline-none" />
-        <button on:click={login} disabled={loginBlocked || loggingIn} class="{loggingIn|| loginBlocked ? 'bg-primary-600 cursor-not-allowed' : 'bg-blurple-600 hover:bg-blurple-700'} p-2 rounded-lg">Login with token 🚀</button>
-        {#if loggingIn}<p>Please wait..., verifying credentials</p> {/if}
+        <button on:click={LoginWrapper} disabled={loginBlocked || loggingIn} class="{loggingIn|| loginBlocked ? 'bg-primary-600 cursor-not-allowed' : 'bg-blurple-600 hover:bg-blurple-700'} p-2 rounded-lg">Login with token 🚀</button>
     </div>
 </div>
