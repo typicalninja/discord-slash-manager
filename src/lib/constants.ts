@@ -23,7 +23,8 @@ export interface DiscordInteraction {
     options: DiscordInteractionOption[]
 }
 
-export function typeToName(type: number): string {
+export function typeToName(type: number | string): string {
+    type = Number(type)
     switch (type) {
         case 1:
             return 'Chat Input';

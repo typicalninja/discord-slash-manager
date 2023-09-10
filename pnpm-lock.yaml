@@ -8,18 +8,15 @@ dependencies:
   '@tanstack/svelte-query':
     specifier: ^4.35.0
     version: 4.35.0(svelte@4.2.0)
-  '@vincjo/datatables':
-    specifier: ^1.12.4
-    version: 1.12.4(svelte@4.2.0)
   axios:
     specifier: ^1.5.0
     version: 1.5.0
+  felte:
+    specifier: ^1.2.12
+    version: 1.2.12(svelte@4.2.0)
   lucide-svelte:
     specifier: ^0.274.0
     version: 0.274.0(svelte@4.2.0)
-  svelte-forms-lib:
-    specifier: ^2.0.1
-    version: 2.0.1
   svelte-local-storage-store:
     specifier: ^0.6.0
     version: 0.6.0(svelte@4.2.0)
@@ -337,6 +334,18 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
+  /@felte/common@1.1.8:
+    resolution: {integrity: sha512-VbEOfNLWfDx0SpCfeE+fNWDpvcntND4MFs7Lxd18RIjrZYH82D0wWe9th2oVF9QT5XzgBEdMF5NGIttcwU4sjg==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
+
+  /@felte/core@1.4.1:
+    resolution: {integrity: sha512-dUzfzug5cK93kBjG0u9F3zDM781qCJP4QwYPOpJsXbydwVseDM5BXpDqvZUFhqJsd0x1GKftkX69+iWafyASjw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      '@felte/common': 1.1.8
+    dev: false
+
   /@humanwhocodes/config-array@0.11.11:
     resolution: {integrity: sha512-N2brEuAadi0CcdeMXUkhbZB84eskAc8MEX1By6qEchoVywSgXPIjou4rYsl0V3Hj0ZnuGycGCjdNgockbzeWNA==}
     engines: {node: '>=10.10.0'}
@@ -649,14 +658,6 @@ packages:
       '@typescript-eslint/types': 5.62.0
       eslint-visitor-keys: 3.4.3
     dev: true
-
-  /@vincjo/datatables@1.12.4(svelte@4.2.0):
-    resolution: {integrity: sha512-Z2MmDL2MRGof7XyxwO/GB99+GEZBja9xKmiOlGfdMKTIH73K48VZKZv43tUgKf26wczZ4HxUzBTcvAcJucqdgQ==}
-    peerDependencies:
-      svelte: '>=3.54.0'
-    dependencies:
-      svelte: 4.2.0
-    dev: false
 
   /acorn-jsx@5.3.2(acorn@8.10.0):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -1190,6 +1191,16 @@ packages:
     dependencies:
       reusify: 1.0.4
     dev: true
+
+  /felte@1.2.12(svelte@4.2.0):
+    resolution: {integrity: sha512-llg9ywCgIso48NnO6jZUy8D9vWuKE90dfIFUZPLyNKqbH1WJ0brNU6C4DkdfXtpRKlzWWHvaQkgMIezKoWlzvA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    peerDependencies:
+      svelte: ^3.31.0 || ^4.0.0
+    dependencies:
+      '@felte/core': 1.4.1
+      svelte: 4.2.0
+    dev: false
 
   /file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
@@ -2088,12 +2099,6 @@ packages:
       postcss-scss: 4.0.7(postcss@8.4.29)
       svelte: 4.2.0
     dev: true
-
-  /svelte-forms-lib@2.0.1:
-    resolution: {integrity: sha512-kwbJ3ynsepsrrJyAMrvSc0Lj/myc9vfI2DL8OKxgArZimrNYsRh1gENYhvrcKEI3BiZrv8q3VFfmGo/GMyk7Zg==}
-    dependencies:
-      dequal: 2.0.3
-    dev: false
 
   /svelte-hmr@0.15.3(svelte@4.2.0):
     resolution: {integrity: sha512-41snaPswvSf8TJUhlkoJBekRrABDXDMdpNpT2tfHIv4JuhgvHqLMhEPGtaQn0BmbNSTkuz2Ed20DF2eHw0SmBQ==}
