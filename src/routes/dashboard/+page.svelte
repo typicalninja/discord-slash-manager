@@ -40,7 +40,7 @@
 		</p>
 	</span>
 	<CommandList bind:id={guildId} {basePath} />
-	<div class="bg-primary-900 flex flex-col p-2 rounded-lg gap-2">
+	<div class="bg-primary-800 flex flex-col p-2 rounded-lg gap-2">
 		{#if guildId && discordIdRegex.test(guildId)}
 			<h1>View Global List</h1>
             <p>

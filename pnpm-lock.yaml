@@ -14,6 +14,12 @@ dependencies:
   axios:
     specifier: ^1.5.0
     version: 1.5.0
+  lucide-svelte:
+    specifier: ^0.274.0
+    version: 0.274.0(svelte@4.2.0)
+  svelte-forms-lib:
+    specifier: ^2.0.1
+    version: 2.0.1
   svelte-local-storage-store:
     specifier: ^0.6.0
     version: 0.6.0(svelte@4.2.0)
@@ -1496,6 +1502,14 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /lucide-svelte@0.274.0(svelte@4.2.0):
+    resolution: {integrity: sha512-+8bKZyOdadiaksrGOftNRfz52PMcddSmNDd1invTrqLTaAg00mrVrHuh6hHypFCpQhZLKrsEHqHl/TwITe/VsA==}
+    peerDependencies:
+      svelte: '>=3 <5'
+    dependencies:
+      svelte: 4.2.0
+    dev: false
+
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
     engines: {node: '>=12'}
@@ -2074,6 +2088,12 @@ packages:
       postcss-scss: 4.0.7(postcss@8.4.29)
       svelte: 4.2.0
     dev: true
+
+  /svelte-forms-lib@2.0.1:
+    resolution: {integrity: sha512-kwbJ3ynsepsrrJyAMrvSc0Lj/myc9vfI2DL8OKxgArZimrNYsRh1gENYhvrcKEI3BiZrv8q3VFfmGo/GMyk7Zg==}
+    dependencies:
+      dequal: 2.0.3
+    dev: false
 
   /svelte-hmr@0.15.3(svelte@4.2.0):
     resolution: {integrity: sha512-41snaPswvSf8TJUhlkoJBekRrABDXDMdpNpT2tfHIv4JuhgvHqLMhEPGtaQn0BmbNSTkuz2Ed20DF2eHw0SmBQ==}

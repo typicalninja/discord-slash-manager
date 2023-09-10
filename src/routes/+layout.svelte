@@ -11,7 +11,7 @@
  
 
 <QueryClientProvider client={queryClient}>
-    <div class="lg:flex bg-primary-500 text-white min-h-screen flex-col gap-2 overflow-x-hidden">
+    <div class="lg:flex bg-primary-500 text-white min-h-screen flex-col gap-2 overflow-hidden">
         <Toaster richColors closeButton position="bottom-right" theme="dark" visibleToasts={5} />
         <Header />
         <slot />
