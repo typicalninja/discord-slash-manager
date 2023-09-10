@@ -15,7 +15,7 @@
 	$: guildId = searchParams && searchParams.get('guildId') || "global";
 	$: basePath =
 		guildId && discordIdRegex.test(guildId)
-			? `/applications/${appInfo.id}/guilds/${guildId}/commands`
+			? `applications/${appInfo.id}/guilds/${guildId}/commands`
 			: `applications/${appInfo.id}/commands`;
 
 	let guildInput = '';

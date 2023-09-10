@@ -6,8 +6,6 @@
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
 
-	import './list.css'
-
 	// custom icons
 	import RefreshCw from './icons/RefreshCW.svelte';
 	import Check from './icons/Check.svelte';
@@ -15,7 +13,8 @@
 	import Pen from './icons/Pen.svelte';
 	import { browser } from '$app/environment';
 
-	import { fly, fade, slide } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
+	import { sineIn } from 'svelte/easing'
 
 	// headers for the table	
 	let headers: string[] = ['Name', 'Type', 'Description'];
@@ -32,7 +31,10 @@
 		queryKey,
 		queryFn: async () => (await fetchAPI(basePath)).data,
 		// disable automatic fetching in when not in browser (messes up dev and static builds)
-		enabled: browser
+		enabled: browser,
+		onError: (err) => {
+			toast.error(`Error occurred while fetching commands, ${err}`)
+		}
 	});
 
 
@@ -86,6 +88,21 @@
 		}, 2000);
 	}
 </script>
+	
+<style>
+	@keyframes shake {
+    0% { transform: rotate(0deg);  }
+    10% { transform: rotate(-1deg);  }
+    25% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+    75% { transform: rotate(0deg); }
+    90%, 100% { transform: rotate(0deg); }
+}
+
+.animate-shake {
+  animation: shake 1s ease-in-out infinite; /* Adjust duration as needed */
+}
+</style>
 
 <div class="flex flex-col gap-2">
 	<!-- control panel -->
@@ -130,13 +147,14 @@
 		</div>
 	</div>
 	<div class="grid grid-cols-1 lg:grid-cols-4 my-3 gap-2">
-		<div role="button" tabindex="-1" on:keydown={addLink} on:click={addLink} class="bg-blurple-500 hover:scale-105 p-5 m-1 rounded-lg">
+		<!-- control Buttons -->
+		<div role="button" tabindex="-1" on:keydown={addLink} on:click={addLink} class="bg-blurple-500 shadow-primary-900 shadow-lg hover:scale-105 p-5 m-1 rounded-lg">
 			<h1 class="text-lg font-bold">Create a new interaction</h1>
-			<p class="text-sm font-semibold text-primary-100">Click here to create a new interaction!</p>
+			<p class="text-sm font-semibold text-primary-100">Click here to create a new {id === 'global' ? '' : `guild (${id})`} interaction!</p>
 		</div>
 		{#if $commandList.isLoading}
 			{#each Array.from({ length: 3 }, (_, index) => index) as cardId (cardId)}
-				<div class="relative bg-primary-700 m-1 p-5 rounded-lg">
+				<div in:fade={{ duration: 1000, delay: 500 }} out:fade={{ duration: 500 }} class="relative bg-primary-700  m-1 p-5 rounded-lg">
 					<div class="flex flex-col gap-2 animate-pulse">
 						<div class="h-2 w-20 mt-4 bg-slate-700 rounded"></div>
 						<div class="h-2 w-24 bg-slate-700 rounded"></div>
@@ -150,21 +168,22 @@
 					</div>
 				</div>
 			{/each}
+		{:else}
+			{#each data as interaction (interaction.id)}
+				<div in:fade={{ duration: 1000, delay: 700, easing: sineIn }} out:fade={{ duration: 500 }} class="relative {deletionConfirmPending.includes(interaction.id) && 'bg-red-800 hover:bg-red-900 animate-shake'} bg-primary-700 shadow-primary-900 shadow-lg m-1 p-5 rounded-lg hover:bg-primary-800">
+					<h1 class="text-lg font-bold">{interaction.name}</h1>
+					<span class="text-sm font-semibold text-primary-200">{typeToName(interaction.type)}</span>
+					<p class="text-sm text-primary-200">{interaction.description}</p>
+					{#if !deletionConfirmPending.includes(interaction.id)}
+						<button on:click={() => deleteInteraction(interaction)} class="absolute top-1 right-1 p-1 border-l border-b border-primary-600 hover:bg-primary-700">
+							<Trash class="text-red-300" />
+						</button>
+						<a href="/edit?commandId={interaction.id}&to={id}" class="absolute bottom-1 right-1 p-1 border-l border-t border-primary-600 hover:bg-primary-700">
+							<Pen class="text-blurple-300" />
+						</a>
+					{/if}
+				</div>
+			{/each}
 		{/if}
-		{#each data as interaction (interaction.id)}
-			<div in:fly={{ duration: 2000 }} out:fade class="relative {deletionConfirmPending.includes(interaction.id) && 'bg-red-800 animate-shake'} bg-primary-700 m-1 p-5 rounded-lg hover:scale-105">
-				<h1 class="text-lg font-bold">{interaction.name}</h1>
-				<span class="text-sm font-semibold text-primary-200">{typeToName(interaction.type)}</span>
-				<p class="text-sm text-primary-200">{interaction.description}</p>
-				{#if !deletionConfirmPending.includes(interaction.id)}
-					<button on:click={() => deleteInteraction(interaction)} class="absolute top-1 right-1 p-1 border-l border-b border-primary-600 hover:bg-primary-800">
-						<Trash class="text-red-300" />
-					</button>
-					<a href="/edit?commandId={interaction.id}&to={id}" class="absolute bottom-1 right-1 p-1 border-l border-t border-primary-600 hover:bg-primary-800">
-						<Pen class="text-blurple-300" />
-					</a>
-				{/if}
-			</div>
-		{/each}
 	</div>
 </div>
