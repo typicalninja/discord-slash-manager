@@ -16,8 +16,6 @@
 	import { fade } from 'svelte/transition';
 	import { sineIn } from 'svelte/easing'
 
-	// headers for the table	
-	let headers: string[] = ['Name', 'Type', 'Description'];
 	// get basePath since same component can be used to get guild commands
 	export let basePath = '';
 	export let id = 'global';
@@ -42,7 +40,7 @@
 	$: deletionConfirmPending = [] as string[]
 
 	/** Functions */
-	const addLink = () => goto(`${base}/add${id === 'global' ? '' : `?guildId=${id}`}`)
+	const addLink = () => goto(`${base}/editor${id === 'global' ? '' : `?guildId=${id}`}`)
 
 	// delete a interaction
 	async function deleteInteraction(interaction: DiscordInteraction) {
@@ -79,13 +77,9 @@
 	}
 
 	async function refreshList() {
-		if (refreshing) return;
 		refreshing = true;
-		queryClient.invalidateQueries({ queryKey });
-		setTimeout(() => {
-			// cooldown
-			refreshing = false;
-		}, 2000);
+		await queryClient.invalidateQueries({ queryKey });
+		refreshing = false;
 	}
 </script>
 	
@@ -178,7 +172,7 @@
 						<button on:click={() => deleteInteraction(interaction)} class="absolute top-1 right-1 p-1 border-l border-b border-primary-600 hover:bg-primary-700">
 							<Trash class="text-red-300" />
 						</button>
-						<a href="/edit?commandId={interaction.id}&to={id}" class="absolute bottom-1 right-1 p-1 border-l border-t border-primary-600 hover:bg-primary-700">
+						<a href="{base}/editor?commandId={interaction.id}{id === 'global' ? '' : `&guildId=${id}`}" class="absolute bottom-1 right-1 p-1 border-l border-t border-primary-600 hover:bg-primary-700">
 							<Pen class="text-blurple-300" />
 						</a>
 					{/if}
