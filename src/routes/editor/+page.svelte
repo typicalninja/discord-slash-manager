@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import CommandOptions from '$components/commandOptions.svelte';
 	import Back from '$components/icons/Back.svelte';
 	import { fetchAPI } from '$lib/api';
 	import { discordIdRegex, typeToName, type DiscordInteraction } from '$lib/constants';
@@ -160,9 +161,9 @@
 				</label>
 			{/if}
 
-			<div class="w-full h-1 bg-primary-800 rounded-lg" />
 			<!-- Special properties -->
 			{#if $data.type === "1"}
+				<div class="w-full h-1 bg-primary-800 rounded-lg" />
 				<!-- Description form chat input interactions -->
 				<label for="description">Slash command Description</label>
 				<textarea
@@ -175,8 +176,9 @@
 				{#if $errors.description}
 					<span class="text-red-300 text-xs">{$errors.description}</span>
 				{/if}
-
-
+				<div class="w-full h-1 bg-primary-800 rounded-lg" />
+				<!-- Dynamic options creator -->
+				<CommandOptions />
 			{/if}
 
 			<button  disabled={editing && ($commandQuery.isLoading || $commandQuery.isError)} type="submit" class="bg-blurple-600 hover:bg-blurple-700 p-2 rounded-lg"
