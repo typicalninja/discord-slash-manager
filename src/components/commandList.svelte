@@ -12,6 +12,7 @@
 	import Trash from './icons/Trash.svelte';
 	import Pen from './icons/Pen.svelte';
 	import { browser } from '$app/environment';
+	import chunk from 'lodash.chunk'
 
 	import { fade } from 'svelte/transition';
 	import { sineIn } from 'svelte/easing'
@@ -23,7 +24,7 @@
 	const queryClient = useQueryClient();
 
 	$: queryKey = ['app.commands', id];
-	$: refreshing = false;
+	let refreshing = false;
 
 	$: commandList = createQuery({
 		queryKey,
@@ -35,8 +36,15 @@
 		}
 	});
 
+	// page info
+	let currentPage = 0;
+	let perPage = 7;
 
 	$: data = ($commandList.data || []) as DiscordInteraction[];
+
+	$: chunkedData = chunk(data, perPage);
+	$: currentData = chunkedData[currentPage] || [] as DiscordInteraction[]
+
 	$: deletionConfirmPending = [] as string[]
 
 	/** Functions */
@@ -102,7 +110,11 @@
 	<!-- control panel -->
 	<div class="bg-primary-800 w-full rounded-md flex items-center justify-between h-12 gap-1">
 		<!-- current counts -->
-		<span class="flex items-center flex-shrink-0 ml-2">{data.length} Interaction</span>
+		<div class="flex items-center flex-shrink-0 ml-2 gap-2">
+			<span>Page</span>
+			<input type="number" min={0} max={chunkedData.length - 1} class="w-10 bg-primary-800 appearance-none" bind:value={currentPage} />
+			<span>{currentData.length} per page | total {data.length}</span>
+		</div>
 		<div>
 			<!-- Status -->
 			{#if $commandList.isLoading}
@@ -163,7 +175,7 @@
 				</div>
 			{/each}
 		{:else}
-			{#each data as interaction (interaction.id)}
+			{#each currentData as interaction (interaction.id)}
 				<div in:fade={{ duration: 1000, delay: 700, easing: sineIn }} out:fade={{ duration: 500 }} class="relative {deletionConfirmPending.includes(interaction.id) && 'bg-red-800 hover:bg-red-900 animate-shake'} bg-primary-700 shadow-primary-900 shadow-lg m-1 p-5 rounded-lg hover:bg-primary-800">
 					<h1 class="text-lg font-bold">{interaction.name}</h1>
 					<span class="text-sm font-semibold text-primary-200">{typeToName(interaction.type)}</span>
