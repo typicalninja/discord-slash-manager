@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import Back from '$components/icons/Back.svelte';
 	import { fetchAPI } from '$lib/api';
 	import { discordIdRegex, typeToName, type DiscordInteraction } from '$lib/constants';
 	import { applicationInfo } from '$lib/localStore';
@@ -22,6 +23,7 @@
 			? `applications/${appInfo.id}/guilds/${id}/commands`
 			: `applications/${appInfo.id}/commands`;
 
+	$: editing = browser && typeof commandId === 'string';
 
 	const { form, errors, data, setFields } = createForm({
 		initialValues: {
@@ -65,18 +67,17 @@
 					data: body
 				}),
 				{
-					loading: `Adding ${typeToName(values.type)} ${values.name}`,
-					success: `Added ${typeToName(values.type)} ${
+					loading: `${editing ? 'Editing' : 'Adding'} ${typeToName(values.type)} ${values.name}`,
+					success: `${editing ? 'Edited' : 'Added'} ${typeToName(values.type)} ${
 						values.name
 					}, you can continue adding commands`,
-					error: `Error occurred while adding "${values.name}"`
+					error: `Error occurred while ${editing ? 'editing' : 'adding'} "${values.name}"`
 				} as any
 			);
 		}
 	});
 
      // query if editing previous command
-	$: editing = browser && typeof commandId === 'string';
 	$: queryKey = ['app.editor.command', id, commandId];
 	$: commandQuery = createQuery({
 		queryKey,
@@ -98,11 +99,11 @@
 <div class="m-2">
 	<form use:form>
 		<div class="bg-primary-700 p-2 flex flex-col gap-3 rounded-lg">
-			<h1 class="text-xl font-bold">
-                <a href="{base}/dashboard{id === 'global' ? '' : `?guildId=${id}`}"> = Back</a>
+			<h1 class="text-xl font-bold flex items-center">
+                <a class="text-blurple-200 hover:text-blurple-300" href="{base}/dashboard{id === 'global' ? '' : `?guildId=${id}`}"><Back /> </a>
 				{#if editing}
 					{#if $commandQuery.isLoading}
-						Please wait..
+						<span>Please wait..</span>
                     {:else if $commandQuery.isError}
                         <span class="text-red-300">Oops Editor failed to fetch command (You wil not be able to edit command {commandId})</span>
 					{:else}
@@ -110,7 +111,7 @@
 						<span class="font-bold text-green-400">{commandData.name}</span> in {@html id === 'global' ? 'global' : `guild <span class="text-blurple-300">(${id})</span>`} scope
 					{/if}
 				{:else}
-					Adding new {typeToName($data.type)} Interaction 	in {@html id === 'global' ? 'global' : `guild <span class="text-blurple-300">(${id})</span>`} scope
+					<span>Adding new {typeToName($data.type)} Interaction 	in {@html id === 'global' ? 'global' : `guild <span class="text-blurple-300">(${id})</span>`} scope</span>
 				{/if}
 			</h1>
 
@@ -146,16 +147,18 @@
                 <span class="text-yellow-300 text-xs">Cannot edit command type</span>
              {/if}
 
-			<label for="dm_permission" class="inline-flex items-center">
-				<span class="mr-2">Allow in Dm</span>
-				<input
-					name="dm_permission"
-					id="dm_permission"
-                    disabled={editing && $commandQuery.isLoading}
-					class="h-5 w-5 bg-primary-500 rounded focus:ring-0 focus:ring-offset-0 focus:outline-none"
-					type="checkbox"
-				/>
-			</label>
+			{#if id === 'global'}
+				<label for="dm_permission" class="inline-flex items-center">
+					<span class="mr-2">Allow in Dm</span>
+					<input
+						name="dm_permission"
+						id="dm_permission"
+						disabled={editing && $commandQuery.isLoading}
+						class="h-5 w-5 bg-primary-500 rounded focus:ring-0 focus:ring-offset-0 focus:outline-none"
+						type="checkbox"
+					/>
+				</label>
+			{/if}
 
 			<div class="w-full h-1 bg-primary-800 rounded-lg" />
 			<!-- Special properties -->
@@ -172,6 +175,8 @@
 				{#if $errors.description}
 					<span class="text-red-300 text-xs">{$errors.description}</span>
 				{/if}
+
+
 			{/if}
 
 			<button  disabled={editing && ($commandQuery.isLoading || $commandQuery.isError)} type="submit" class="bg-blurple-600 hover:bg-blurple-700 p-2 rounded-lg"

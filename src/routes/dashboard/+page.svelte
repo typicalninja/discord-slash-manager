@@ -40,22 +40,23 @@
 		</p>
 	</span>
 	<CommandList bind:id={guildId} {basePath} />
-	<div class="bg-primary-800 flex flex-col p-2 rounded-lg gap-2">
+	<div class="bg-primary-700 flex flex-col p-2 rounded-lg gap-2">
 		{#if guildId && discordIdRegex.test(guildId)}
-			<h1>View Global List</h1>
+			<h1 class="text-xl">View Global List</h1>
             <p>
-                You are currently viewing the list for specific guild with id "{guildId}"
+                <span class="text-green-300 font-semibold">You are currently viewing guild specific list</span><br>
+				for guild <span class="text-pink-300">{guildId}</span><br>
                 Click the below button to view the global list
             </p>
 			<a href="{base}/dashboard" class="bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg"
 				>View global commands</a
 			>
 		{:else}
-			<h1>View Guild commands</h1>
+			<h1 class="text-xl">View Guild commands</h1>
             <p>
-                You are currently viewing the global list.
-                Enter a guild id (your bot must be invited to it)
-                and click the button to manage guild specific interactions
+                <span class="text-green-300 font-semibold">You are currently viewing the global list.</span><br>
+                Enter a guild id <span class="font-bold text-yellow-300">(your bot must be invited to it)</span><br>
+                and click the button to <span class="text-indigo-300">manage / view</span> guild specific interactions
             </p>
 			<input
 				id="guildId"

@@ -36,6 +36,7 @@
 		"@tanstack/svelte-query": "^4.35.0",
 		"axios": "^1.5.0",
 		"felte": "^1.2.12",
+		"lodash.chunk": "^4.2.0",
 		"lucide-svelte": "^0.274.0",
 		"svelte-local-storage-store": "^0.6.0",
 		"svelte-sonner": "^0.1.4"

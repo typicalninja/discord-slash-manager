@@ -142,10 +142,10 @@
 	</div>
 	<div class="grid grid-cols-1 lg:grid-cols-4 my-3 gap-2">
 		<!-- control Buttons -->
-		<div role="button" tabindex="-1" on:keydown={addLink} on:click={addLink} class="bg-blurple-500 shadow-primary-900 shadow-lg hover:scale-105 p-5 m-1 rounded-lg">
+		<a href={`${base}/editor${id === 'global' ? '' : `?guildId=${id}`}`} class="bg-blurple-500 shadow-primary-900 shadow-lg hover:scale-105 p-5 m-1 rounded-lg">
 			<h1 class="text-lg font-bold">Create a new interaction</h1>
 			<p class="text-sm font-semibold text-primary-100">Click here to create a new {id === 'global' ? '' : `guild (${id})`} interaction!</p>
-		</div>
+		</a>
 		{#if $commandList.isLoading}
 			{#each Array.from({ length: 3 }, (_, index) => index) as cardId (cardId)}
 				<div in:fade={{ duration: 1000, delay: 500 }} out:fade={{ duration: 500 }} class="relative bg-primary-700  m-1 p-5 rounded-lg">
