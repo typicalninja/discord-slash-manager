@@ -1,22 +1,24 @@
 # Discord-slash-manager 💻
 
 [![Github stars](https://img.shields.io/github/stars/typicalninja/discord-slash-manager)](https://github.com/typicalninja/discord-slash-manager/stargazers)
+[![Discord](https://img.shields.io/discord/807868280387665970)](https://discord.gg/ynwckXS9T2 
+)
 
+Simple & Up to date tool to manage and view Discord interactions for any application. ✨
 
-Simple tool to manage and view Discord interactions for any application. ✨
 
 ## Usage
 
-> Site is hosted via **github pages** and is available [here](https://typicalninja.github.io/discord-slash-manager/)
+* Site is hosted via **github pages** and is available [here](https://typicalninja.github.io/discord-slash-manager/)
 
 * Login with your credentials [here](https://typicalninja.github.io/discord-slash-manager/login)
 
 The site will automatically redirect you the the global dashboard where you can view and 
 manage your Discord Interactions.
 
-## WIP
 
-This Project is still work in progress 🔧.
+> Join discord for support ([![Discord](https://img.shields.io/discord/807868280387665970)](https://discord.gg/ynwckXS9T2 
+))
 
 ## Disclaimer
 
