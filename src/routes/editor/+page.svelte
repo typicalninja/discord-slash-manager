@@ -5,12 +5,14 @@
 	import CommandOptions from '$components/commandOptions.svelte';
 	import Back from '$components/icons/Back.svelte';
 	import { fetchAPI } from '$lib/api';
-	import { discordIdRegex, typeToName, type DiscordInteraction } from '$lib/constants';
+	import { discordIdRegex, typeToName, type DiscordInteraction, chatInputRegex, type AccordionOption, OptionTypes } from '$lib/constants';
+	import { generateRandomAlphaNumeric } from '$lib/helpers';
 	import { applicationInfo } from '$lib/localStore';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { createForm } from 'felte';
 	import { toast } from 'svelte-sonner';
 	import { get } from 'svelte/store';
+
 
 	// creates a dummy searchParams if not in browser
 	$: searchParams = browser ? $page.url.searchParams : new URLSearchParams();
@@ -26,6 +28,8 @@
 
 	$: editing = browser && typeof commandId === 'string';
 
+	let commandOptions = [] as AccordionOption[]
+
 	const { form, errors, data, setFields } = createForm({
 		initialValues: {
 			type: "1",
@@ -40,6 +44,9 @@
 			} else if (values?.name?.length < 3) {
 				errs['name'] = `Interaction name length must be greater than 3`;
 			}
+			else if(!chatInputRegex.test(values.name) && values.type == "1") {
+				errs['name'] = `Name must be lowercased and must not contain spaces`;
+			}
 
 			if (values.description === '' && values.type == "1") {
 				errs['description'] = 'Description is required for chat input interactions';
@@ -52,14 +59,44 @@
 				name: values.name
 			} as Record<string, unknown>;
 
+			// if chat input
 			if (values.type === "1") {
 				body['description'] = values.description;
+
+				if(commandOptions.length) {
+					body['options'] = commandOptions.map((opt) => {
+						const option = {
+							type: opt.type,
+							name: opt.name,
+							description: opt.description,
+							required: opt.required,
+						} as Record<string, unknown>;
+
+						if(opt.type === OptionTypes.String) {
+							if(opt.max_length && !isNaN(opt.max_length)) option.max_length = opt.max_length;
+							if(opt.min_length && !isNaN(opt.min_length)) option.min_length = opt.min_length;
+							option.autocomplete = opt.autocomplete;
+						}
+
+						if([OptionTypes.Integer, OptionTypes.Number].includes(opt.type)) {
+							if(opt.max_value && !isNaN(opt.max_value)) option.max_value = opt.max_value;
+							if(opt.min_value && !isNaN(opt.min_value)) option.min_value = opt.min_value;
+							option.autocomplete = opt.autocomplete;
+						}
+
+
+
+						return option;
+					})
+				}
 			}
         
 
             if(id === 'global') {
                 body["dm_permission"] = values.dm_permission;
             }
+
+
 
 
 			toast.promise(
@@ -94,7 +131,11 @@
            })
         },
 	});
+
+
 	$: commandData = ($commandQuery.data || {}) as DiscordInteraction;
+	// have to do this
+	$: commandOptionsRaw = (commandData?.options?.map((c) => ({ ...c, itemId: generateRandomAlphaNumeric(10), open: false })) || []) as unknown as AccordionOption[]
 </script>
 
 <div class="m-2">
@@ -178,7 +219,7 @@
 				{/if}
 				<div class="w-full h-1 bg-primary-800 rounded-lg" />
 				<!-- Dynamic options creator -->
-				<CommandOptions />
+				<CommandOptions bind:value={commandOptionsRaw} bind:options={commandOptions} />
 			{/if}
 
 			<button  disabled={editing && ($commandQuery.isLoading || $commandQuery.isError)} type="submit" class="bg-blurple-600 hover:bg-blurple-700 p-2 rounded-lg"

@@ -4,14 +4,26 @@ export enum Urls {
     Github = "https://github.com/typicalninja/discord-slash-manager"
 }
 
-export const discordIdRegex = /^[0-9]{18}$/;
 
+// regex for validation
+export const discordIdRegex = /^[0-9]{18}$/;
+export const chatInputRegex = /^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u
+
+/* All options supported by discord rolled into one */
 export interface DiscordInteractionOption {
-    type: number;
+    type: OptionTypes;
+    id: number;
     name: string;
     description: string;
+    autocomplete:  boolean;
     required: boolean;
+    min_value: number | null;
+    max_value: number | null;
+    min_length: number | null;
+    max_length: number | null;
 }
+
+export type AccordionOption = DiscordInteractionOption & { open: boolean; itemId: string };
 
 export interface DiscordInteraction {
     id: string;
@@ -21,6 +33,20 @@ export interface DiscordInteraction {
     dm_permission: boolean;
     nsfw: boolean;
     options: DiscordInteractionOption[]
+}
+
+export enum OptionTypes {
+    SubCommand = 1,
+    SubCommandGroup = 2,
+    String = 3,
+    Integer = 4,
+    Boolean = 5,
+    User = 6,
+    Channel = 7,
+    Role = 8,
+    Mentionable = 9,
+    Number = 10,
+    Attachment = 11,
 }
 
 export function typeToName(type: number | string): string {
