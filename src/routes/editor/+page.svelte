@@ -149,8 +149,7 @@
                     {:else if $commandQuery.isError}
                         <span class="text-red-300">Oops Editor failed to fetch command (You wil not be able to edit command {commandId})</span>
 					{:else}
-						Editing {typeToName(commandData.type)}
-						<span class="font-bold text-green-400">{commandData.name}</span> in {@html id === 'global' ? 'global' : `guild <span class="text-blurple-300">(${id})</span>`} scope
+						Editing {typeToName(commandData.type)} <span class="m-1 font-bold text-green-400">{commandData.name}</span> in {@html id === 'global' ? 'global' : `guild <span class="text-blurple-300">(${id})</span>`} scope
 					{/if}
 				{:else}
 					<span>Adding new {typeToName($data.type)} Interaction 	in {@html id === 'global' ? 'global' : `guild <span class="text-blurple-300">(${id})</span>`} scope</span>

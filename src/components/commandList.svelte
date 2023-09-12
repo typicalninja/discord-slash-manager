@@ -67,7 +67,7 @@
 					label: 'Delete',
 					onClick: () => {
 						toast.promise(
-							fetchAPI(`${basePath}/${interaction.id}`, { method: 'DELETE' }).then(() => { refreshList(); removeFromPending();}),
+							fetchAPI(`${basePath}/${interaction.id}`, { method: 'DELETE' }).finally(() => { refreshList(); removeFromPending();}),
 							{
 								success: `${typeToName(interaction.type)} (${
 									interaction.name
